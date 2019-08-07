@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+
+#sqlite
+db.sqlite3
+
+# Editors
+.vscode
+.idea/
+.idea
+
+# Django stuff:
+*.log
+*.pot
+
+#Envs
+.env*
+
+#Builds
+build/
+dist/
+*.code-workspace
+
+#Output Files
+myscrapy/Screenshots*
+items.jl
+*.html

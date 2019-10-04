@@ -12,4 +12,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD [ "python", "./mykafka-python.py" ]
+CMD [ "python", "./main.py" ]

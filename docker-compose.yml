@@ -1,15 +1,15 @@
 version: "3"
 services:
-  kafkapython:
-    image: parthij15/kafka_python:0.0
+  producer:
+    image: <<PRODUCER_IMAGE>>
     deploy:
-      replicas: 3
+      replicas: 1
       resources:
         limits:
           cpus: "0.1"
           memory: 50M
       restart_policy:
-        condition: on-failure
+        condition: any
     ports:
       - "8000:80"
     networks:

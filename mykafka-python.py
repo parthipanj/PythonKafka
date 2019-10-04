@@ -44,8 +44,8 @@ class Producer:
 
 class Consumer:
     def __init__(self):
-        self.topic = "new_topic"
-        self.kafka_brokers = ["localhost:9092"]
+        self.topic = "internal"
+        self.kafka_brokers = ["192.168.10.98:9094"]
 
     def consume_message(self):
         """
@@ -56,10 +56,10 @@ class Consumer:
             consumer = KafkaConsumer(
                 self.topic,
                 bootstrap_servers=self.kafka_brokers,
-                auto_offset_reset='earliest',
+                auto_offset_reset='latest',
                 enable_auto_commit=True,
                 # value_deserializer=lambda x: json.loads(x.decode('utf-8')),
-                # group_id='alarm'
+                # group_id='raw'
             )
         except (IllegalStateError, AssertionError, TypeError, Exception) as error:
             print('*' * 100, 'KAFKA_CONSUMER_ERROR: %s' % (str(error)))
@@ -68,7 +68,7 @@ class Consumer:
                 log_msg = message.value if hasattr(message, 'value') else message
                 decoded_value = codecs.escape_decode(log_msg)[0].decode('utf-8')
                 decoded_value = self.replace_double_quotes(decoded_value)
-                print(message, decoded_value)
+                print(decoded_value, "D" * 100)
 
     @staticmethod
     def replace_double_quotes(data):
@@ -86,8 +86,8 @@ def main():
     consumer_process = Process(target=Consumer().consume_message, args=())
     consumer_process.start()
 
-    producer_process = Process(target=Producer().produce_message, args=())
-    producer_process.start()
+    # producer_process = Process(target=Producer().produce_message, args=())
+    # producer_process.start()
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 version: "3"
 services:
   producer:
-    image: <<PRODUCER_IMAGE>>
+    image: kafkapython:1.0.0
     deploy:
       replicas: 1
       resources:
@@ -10,9 +10,60 @@ services:
           memory: 50M
       restart_policy:
         condition: any
+        delay: 1s
+        max_attempts: 3
+        window: 60s
     ports:
-      - "8000:80"
+      - target: 80
+        published: 8000
+        protocol: tcp
+        mode: host
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    environment:
+      KAFKA_SERVICE: producer
+      configs:
+        - source: producer-env
+          target: /usr/src/app/.env
     networks:
-      - webnet
+      - host
+  consumer:
+    image: kafkapython:1.0.0
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: any
+        delay: 1s
+        max_attempts: 3
+        window: 60s
+    ports:
+      - target: 80
+        published: 8001
+        protocol: tcp
+        mode: host
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    environment:
+      KAFKA_SERVICE: consumer
+      configs:
+        - source: consumer-env
+          target: /usr/src/app/.env
+    networks:
+      - host
 networks:
-  webnet:
+  host:
+configs:
+  producer-env:
+    file: ./config/producer.yml
+  consumer-env:
+    file: ./config/consumer.yml
